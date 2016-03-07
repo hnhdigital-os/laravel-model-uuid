@@ -1,5 +1,5 @@
 {
-    "name": "bluora/model-uuid-column",
+    "name": "bluora/laravel-model-uuid-column",
     "description": "Provides UUID datatype support for the Eloquent ORM",
     "keywords": ["laravel","illuminate","eloquent","uuid"],
     "license": "MIT",
@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ModelUuidColumn\\": "src/ModelUuidColumn/"
+            "ModelUuidColumn\\": "src/"
         }
     }
 }

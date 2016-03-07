@@ -6,7 +6,7 @@ Adds support for the UUID datatype column for models provided by the [Eloquent O
 
 Require this package in your `composer.json` file:
 
-`"bluora/model-uuid-column": "dev-master"`
+`"bluora/laravel-model-uuid-column": "dev-master"`
 
 Then run `composer update` to download the package to your vendor directory.
 
