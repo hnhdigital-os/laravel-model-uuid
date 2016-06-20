@@ -1,15 +1,14 @@
 <?php
 
-namespace ModelUuidColumn;
+namespace Bluora\LaravelModelUuid;
 
-trait UuidColumnTrait
+trait UuidTrait
 {
     /**
      * Cast an attribute to a native PHP type.
      *
      * @param string $key
      * @param mixed  $value
-     *
      * @return mixed
      */
     protected function castAttribute($key, $value)
@@ -22,7 +21,7 @@ trait UuidColumnTrait
             case 'uuid':
                 $value = unpack('H*', $value);
 
-                return strtoupper(preg_replace('/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/', '$1-$2-$3-$4-$5', $value[1]));
+                return strtolower(preg_replace('/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/', '$1-$2-$3-$4-$5', $value[1]));
             default:
                 return parent::castAttribute($key, $value);
         }
@@ -33,8 +32,7 @@ trait UuidColumnTrait
      *
      * @param string $column
      * @param mixed  $value
-     *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function whereUuid($column, $value)
     {
@@ -46,8 +44,7 @@ trait UuidColumnTrait
      *
      * @param string $column
      * @param mixed  $value
-     *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function whereUuidIn($column, $value)
     {
@@ -58,7 +55,7 @@ trait UuidColumnTrait
             return new static();
         }
         $value = str_replace('-', '', $value);
-        $value = preg_replace('/([a-zA-Z0-0].*)/', "UNHEX('$1')", $value);
+        $value = preg_replace('/([a-zA-Z0-9].*)/', "UNHEX('$1')", $value);
         $value = implode(',', $value);
         $sql = sprintf("$column IN (%s)", $value);
 
