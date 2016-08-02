@@ -34,9 +34,9 @@ trait UuidTrait
      * @param mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function whereUuid($column, $value)
+    public function scopeWhereUuid($query, $column, $value)
     {
-        return self::whereUuidIn($column, $value);
+        return $query->whereUuidIn($column, $value);
     }
 
     /**
@@ -46,19 +46,19 @@ trait UuidTrait
      * @param mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function whereUuidIn($column, $value)
+    public function scopeWhereUuidIn($query, $column, $value)
     {
         if (!is_array($value)) {
             $value = [$value];
         }
         if (count($value) == 0) {
-            return new static();
+            return $query;
         }
         $value = str_replace('-', '', $value);
         $value = preg_replace('/([a-zA-Z0-9].*)/', "UNHEX('$1')", $value);
         $value = implode(',', $value);
         $sql = sprintf("$column IN (%s)", $value);
 
-        return parent::__callStatic('whereRaw', [$sql]);
+        return $query->whereRaw($sql);
     }
 }
