@@ -9,6 +9,7 @@ trait UuidTrait
      *
      * @param string $key
      * @param mixed  $value
+     *
      * @return mixed
      */
     protected function castAttribute($key, $value)
@@ -32,6 +33,7 @@ trait UuidTrait
      *
      * @param string $column
      * @param mixed  $value
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereUuid($query, $column, $value)
@@ -44,6 +46,7 @@ trait UuidTrait
      *
      * @param string $column
      * @param mixed  $value
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeWhereUuidIn($query, $column, $value)
