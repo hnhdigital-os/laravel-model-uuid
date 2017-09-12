@@ -2,6 +2,9 @@
 
 namespace Bluora\LaravelModelUuid;
 
+use Config;
+use Webpatser\Uuid\Uuid;
+
 trait UuidTrait
 {
     /**
@@ -35,6 +38,10 @@ trait UuidTrait
      */
     public static function castUuidAttribute($value)
     {
+        if (!Config::get('uuid.binary', true)) {
+            return $value;
+        }
+
         $value = unpack('H*', $value);
 
         return strtolower(preg_replace('/([0-9a-f]{8})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{4})([0-9a-f]{12})/', '$1-$2-$3-$4-$5', $value[1]));
@@ -70,10 +77,39 @@ trait UuidTrait
             return $query;
         }
         $value = str_replace('-', '', $value);
-        $value = preg_replace('/([a-zA-Z0-9].*)/', "UNHEX('$1')", $value);
+
+        if (Config::get('uuid.binary', true)) {
+            $value = preg_replace('/([a-zA-Z0-9].*)/', "UNHEX('$1')", $value);
+        }
+        
         $value = implode(',', $value);
         $sql = sprintf("$column IN (%s)", $value);
 
         return $query->whereRaw($sql);
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return $this->getKeyName();
+    }
+
+    /**
+     * Boot events for this trait.
+     *
+     * @return void
+     */
+    public static function bootUuidTrait()
+    {
+        // Changes on creating
+        static::creating(function ($model) {
+            if ($model->incrementing == false && $model->getKeyName() == 'uuid') {
+                $model->uuid = Uuid::generate(1);
+            }
+        });
     }
 }
