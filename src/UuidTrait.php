@@ -81,7 +81,7 @@ trait UuidTrait
         if (Config::get('uuid.binary', true)) {
             $value = preg_replace('/([a-zA-Z0-9].*)/', "UNHEX('$1')", $value);
         }
-        
+
         $value = implode(',', $value);
         $sql = sprintf("$column IN (%s)", $value);
 
