@@ -107,15 +107,13 @@ trait UuidTrait
     {
         if (empty($this->getKey()) && $this->incrementing == false) {
             $name = $this->getKeyName();
-            
+
             if ($this->getCastType($name) === 'uuid') {
                 $this->$name = (string) Uuid::generate(1);
 
                 return $this->$name;
             }
         }
-
-        return null;
     }
 
     /**
