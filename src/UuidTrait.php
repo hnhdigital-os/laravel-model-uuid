@@ -99,6 +99,26 @@ trait UuidTrait
     }
 
     /**
+     * Generate primary key.
+     *
+     * @return string
+     */
+    public function generateUuidPrimaryKey()
+    {
+        if (empty($this->getKey()) && $this->incrementing == false) {
+            $name = $this->getKeyName();
+            
+            if ($this->getCastType($name) === 'uuid') {
+                $this->$name = (string) Uuid::generate(1);
+
+                return $this->$name;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Boot events for this trait.
      *
      * @return void
@@ -107,9 +127,7 @@ trait UuidTrait
     {
         // Changes on creating
         static::creating(function ($model) {
-            if ($model->incrementing == false && $model->getKeyName() == 'uuid') {
-                $model->uuid = Uuid::generate(1);
-            }
+            $model->generateUuidPrimaryKey();
         });
     }
 }
