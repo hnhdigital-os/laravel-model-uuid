@@ -102,13 +102,15 @@ trait UuidTrait
      * Generate primary key.
      *
      * @return string
+     *
+     * @todo  Change Uuid generation to use config so determinte what type.
      */
     public function generateUuidPrimaryKey()
     {
-        if (empty($this->getKey()) && $this->incrementing == false) {
+        if (empty($this->getKey()) && !$this->getIncrementing()) {
             $name = $this->getKeyName();
 
-            if ($this->getCastType($name) === 'uuid') {
+            if (!is_null($name) && $this->getCastType($name) === 'uuid') {
                 $this->$name = (string) Uuid::generate(1);
 
                 return $this->$name;
