@@ -109,7 +109,6 @@ trait UuidTrait
     {
         if (empty($this->getKey()) && !$this->getIncrementing()) {
             $name = $this->getKeyName();
-
             if (!is_null($name) && $this->getCastType($name) === 'uuid') {
                 $this->$name = (string) Uuid::generate(1);
 
@@ -127,7 +126,9 @@ trait UuidTrait
     {
         // Changes on creating
         static::creating(function ($model) {
+            static::unguard();
             $model->generateUuidPrimaryKey();
+            static::guard();
         });
     }
 }
