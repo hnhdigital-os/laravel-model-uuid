@@ -128,7 +128,7 @@ trait UuidTrait
         static::creating(function ($model) {
             static::unguard();
             $model->generateUuidPrimaryKey();
-            static::guard();
+            static::reguard();
         });
     }
 }
