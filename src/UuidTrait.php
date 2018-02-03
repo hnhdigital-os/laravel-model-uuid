@@ -99,6 +99,16 @@ trait UuidTrait
     }
 
     /**
+     * Generate UUID.
+     *
+     * @return string
+     */
+    public function generateUuid()
+    {
+        return (string) Uuid::generate(1, file_get_contents('/etc/machine-id'));
+    }
+
+    /**
      * Generate primary key.
      *
      * @return string
@@ -110,7 +120,7 @@ trait UuidTrait
         if (empty($this->getKey()) && !$this->getIncrementing()) {
             $name = $this->getKeyName();
             if (!is_null($name) && $this->getCastType($name) === 'uuid') {
-                $this->$name = (string) Uuid::generate(1);
+                $this->$name = $this->generateUuid();
 
                 return $this->$name;
             }
