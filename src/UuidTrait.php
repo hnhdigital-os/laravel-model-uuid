@@ -17,16 +17,11 @@ trait UuidTrait
      */
     protected function castAttribute($key, $value)
     {
-        if (is_null($value)) {
-            return $value;
+        if ($this->getCastType($key) == 'uuid') {
+            return self::castUuidAttribute($value);
         }
 
-        switch ($this->getCastType($key)) {
-            case 'uuid':
-                return self::castUuidAttribute($value);
-            default:
-                return parent::castAttribute($key, $value);
-        }
+        return parent::castAttribute($key, $value);
     }
 
     /**
@@ -38,6 +33,10 @@ trait UuidTrait
      */
     public static function castUuidAttribute($value)
     {
+        if (is_null($value)) {
+            return $value;
+        }
+
         if (!Config::get('uuid.binary', true)) {
             return $value;
         }
