@@ -69,12 +69,19 @@ trait UuidTrait
      */
     public function scopeWhereUuidIn($query, $column, $value)
     {
+        // Convert object to uuid string.
+        if (is_object($value)) {
+            $value = $value->uuid;
+        }
+
         if (!is_array($value)) {
             $value = [$value];
         }
+
         if (count($value) == 0) {
             return $query;
         }
+
         $value = str_replace('-', '', $value);
 
         if (Config::get('uuid.binary', true)) {
